@@ -80,8 +80,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   /// This will work only when the data fills the scroll view so
-  /// I added a visibility listener (we probably only need on solution)
-  /// so I'd remove the "extra" loader at the end of the list.
+  /// I added a visibility listener (we probably only need one of these solution)
+  /// so I might remove the "extra" loader at the end of the list.
   void _scrollListener() {
     debugPrint('_scrollController.offset ${_scrollController.offset}');
     debugPrint('_scrollController.position.maxScrollExtent.offset ${_scrollController.position.maxScrollExtent}');
