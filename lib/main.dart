@@ -60,9 +60,9 @@ class _MyHomePageState extends State<MyHomePage> {
       final newData = List.generate(_perPage, (index) => _counter * _perPage + index + 1);
       setState(() {
         _dataSubject.value.addAll(newData);
+         // Increment counter for pagination
         _counter++;
       });
-      // Increment counter for pagination
     });
   }
 
