@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // new loadData
   void loadData() {
-    debugPrint('loadMoreData () _counter $_counter');
+    debugPrint('loadData () _counter $_counter');
     // Simulating loading data asynchronously
     Future.delayed(const Duration(seconds: 2), () {
       final newData = List.generate(_perPage, (index) => _counter * _perPage + index + 1);
