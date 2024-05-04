@@ -38,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _dataSubject = BehaviorSubject<List<int>>();
+    // initial the list so data appends
     _dataSubject.value = [];
     _scrollController = ScrollController()..addListener(_scrollListener);
 
