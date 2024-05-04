@@ -38,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _dataSubject = BehaviorSubject<List<int>>();
+    _dataSubject.value = [];
     _scrollController = ScrollController()..addListener(_scrollListener);
 
     loadData();
@@ -50,23 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  /// This is fine for loading data but it isn't appending but rather replacing data.
+  // new loadData
   void loadData() {
-    debugPrint('loadData () _counter $_counter');
-    // Simulating loading data asynchronously
-    Future.delayed(const Duration(seconds: 2), () {
-      final newData = List.generate(_perPage, (index) => _counter * _perPage + index + 1);
-
-      /// this is initializing the list object
-      _dataSubject.add(newData);
-      _counter++; // Increment counter for pagination
-    });
-  }
-
-  /// this loads data by appending to existing list
-  /// it would be better to combine the load data and check for existing
-  /// data. We also need to call setState to visually reload the ListView
-  void loadMoreData() {
     debugPrint('loadMoreData () _counter $_counter');
     // Simulating loading data asynchronously
     Future.delayed(const Duration(seconds: 2), () {
@@ -78,6 +64,35 @@ class _MyHomePageState extends State<MyHomePage> {
       // Increment counter for pagination
     });
   }
+
+  /// This is fine for loading data but it isn't appending but rather replacing data.
+  // void loadData() {
+  //   debugPrint('loadData () _counter $_counter');
+  //   // Simulating loading data asynchronously
+  //   Future.delayed(const Duration(seconds: 2), () {
+  //     final newData = List.generate(_perPage, (index) => _counter * _perPage + index + 1);
+  //
+  //     /// this is initializing the list object
+  //     _dataSubject.add(newData);
+  //     _counter++; // Increment counter for pagination
+  //   });
+  // }
+  //
+  // /// this loads data by appending to existing list
+  // /// it would be better to combine the load data and check for existing
+  // /// data. We also need to call setState to visually reload the ListView
+  // void loadMoreData() {
+  //   debugPrint('loadMoreData () _counter $_counter');
+  //   // Simulating loading data asynchronously
+  //   Future.delayed(const Duration(seconds: 2), () {
+  //     final newData = List.generate(_perPage, (index) => _counter * _perPage + index + 1);
+  //     setState(() {
+  //       _dataSubject.value.addAll(newData);
+  //       _counter++;
+  //     });
+  //     // Increment counter for pagination
+  //   });
+  // }
 
   /// This will work only when the data fills the scroll view so
   /// I added a visibility listener (we probably only need one of these solution)
@@ -91,13 +106,13 @@ class _MyHomePageState extends State<MyHomePage> {
       debugPrint('out of range');
 
       // Reached the end, load more data
-      loadMoreData();
+      loadData();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    void onLoadDataCallback(VisibilityInfo v) => v.visibleFraction > 0.0 ? loadMoreData() : null;
+    void onLoadDataCallback(VisibilityInfo v) => v.visibleFraction > 0.0 ? loadData() : null;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Infinite Scroll Example'),
