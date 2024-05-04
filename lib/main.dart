@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-const Duration _scrollDuration = Duration(milliseconds: 500);
-
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +22,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -52,16 +50,22 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
+  /// This is fine for loading data but it isn't appending but rather replacing data.
   void loadData() {
     debugPrint('loadData () _counter $_counter');
     // Simulating loading data asynchronously
     Future.delayed(const Duration(seconds: 2), () {
       final newData = List.generate(_perPage, (index) => _counter * _perPage + index + 1);
+
+      /// this is initializing the list object
       _dataSubject.add(newData);
       _counter++; // Increment counter for pagination
     });
   }
 
+  /// this loads data by appending to existing list
+  /// it would be better to combine the load data and check for existing
+  /// data. We also need to call setState to visually reload the ListView
   void loadMoreData() {
     debugPrint('loadMoreData () _counter $_counter');
     // Simulating loading data asynchronously
@@ -75,6 +79,9 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  /// This will work only when the data fills the scroll view so
+  /// I added a visibility listener (we probably only need on solution)
+  /// so I'd remove the "extra" loader at the end of the list.
   void _scrollListener() {
     debugPrint('_scrollController.offset ${_scrollController.offset}');
     debugPrint('_scrollController.position.maxScrollExtent.offset ${_scrollController.position.maxScrollExtent}');
@@ -102,8 +109,6 @@ class _MyHomePageState extends State<MyHomePage> {
             final data = snapshot.data!;
             return ListView.builder(
               controller: _scrollController,
-              // // shrinkWrap: true,
-              // physics: AlwaysScrollableScrollPhysics(),
               itemCount: data.length + 1, // +1 for loading indicator
               itemBuilder: (context, index) {
                 if (index < data.length) {
